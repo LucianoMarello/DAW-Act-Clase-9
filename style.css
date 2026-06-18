@@ -4,14 +4,17 @@
   align-items: center;
   flex-wrap: wrap;
   background-color: rgba(145, 190, 235, 0.652);
-  padding: 15px;
+  padding: 25px;
+}
+
+div {
+  width: 75%;
+  margin: 6px;
 }
 
 label {
   font-size: 18px;
   font-family: Arial, Helvetica, sans-serif;
-  width: 80%;
-  margin-top: 8px;
 }
 
 input {
@@ -20,6 +23,11 @@ input {
   border: 0px;
   border-radius: 8px;
   margin-top: 5px;
+}
+
+p {
+  color: red;
+  margin: 7px 0;
 }
 
 button {
@@ -36,17 +44,12 @@ button {
   }
 }
 
-p {
-  margin: 5px;
-}
-
 @media (min-width: 1024px) {
   #form fieldset {
     flex-direction: row;
     justify-content: space-evenly;
-    background-color: violet;
   }
-  label {
+  div {
     width: 40%;
   }
 }
