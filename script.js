@@ -9,6 +9,8 @@ const direction = document.getElementById("direction");
 const city = document.getElementById("city");
 const codigoPostal = document.getElementById("codigoPostal");
 const dni = document.getElementById("dni");
+const popUp = document.getElementById("miPopup");
+const contenedor = document.getElementById("resultadoDatos");
 
 //NOMBRE
 nombre.addEventListener("blur", function () {
@@ -194,9 +196,72 @@ form.addEventListener("submit", (e) => {
         erroresEncontrados.join("\n"),
     );
   } else {
-    alert(
-      "¡Suscripción exitosa!\nDatos validados:\n\n" + resumenDatos.join("\n"),
-    );
-    // form.submit();
+    console.log("Formulario válido. Enviando datos...");
+    const url = "https://jsonplaceholder.typicode.com/posts";
+    const data = {
+      name: nombre.value,
+      email: email.value,
+      password: password.value,
+      confirmPassword: confirmPassword.value,
+      age: age.value,
+      tel: tel.value,
+      direction: direction.value,
+      city: city.value,
+      codigoPostal: codigoPostal.value,
+      dni: dni.value,
+    };
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((datosRecibidos) => {
+        localStorage.setItem("datosSuscripcion", JSON.stringify(data));
+        mostrarPopup(datosRecibidos, true);
+      })
+      .catch((error) => {
+        mostrarPopup(error, false);
+      });
   }
 });
+
+function mostrarPopup(datos, esExito) {
+  const titulo = document.querySelector("#miPopup h2");
+
+  if (esExito) {
+    titulo.innerText = "Suscripción Exitosa!";
+    titulo.style.color = "green";
+  } else {
+    titulo.innerText = "Error en la suscripción";
+    titulo.style.color = "red";
+  }
+
+  contenedor.innerText = JSON.stringify(datos, null, 2);
+  popUp.style.display = "flex";
+}
+
+function cerrarPopup() {
+  popUp.style.display = "none";
+}
+
+window.onload = function () {
+  const datosGuardados = localStorage.getItem("datosSuscripcion");
+  if (datosGuardados) {
+    const datosParsed = JSON.parse(datosGuardados);
+
+    nombre.value = datosParsed.name || "";
+    email.value = datosParsed.email || "";
+    password.value = datosParsed.password || "";
+    confirmPassword.value = datosParsed.confirmPassword || "";
+    age.value = datosParsed.age || "";
+    tel.value = datosParsed.tel || "";
+    direction.value = datosParsed.direction || "";
+    city.value = datosParsed.city || "";
+    codigoPostal.value = datosParsed.codigoPostal || "";
+    dni.value = datosParsed.dni || "";
+  }
+};
